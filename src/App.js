@@ -7,6 +7,7 @@ function App() {
   useEffect(() => {
     axios.get('https://fake-user-data-generation-ivory.vercel.app/generateFakeData?region=en_US&errorCount=2&seed=12345')
       .then((response) => {
+        console.log(response.data);
         setFakeData(response.data);
       })
       .catch((error) => {
