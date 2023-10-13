@@ -1,23 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function App() {
+  const [fakeData, setFakeData] = useState(null);
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/generateFakeData?region=en&errorCount=2&seed=12345')
+      .then((response) => {
+        setFakeData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching fake data:', error);
+        // Добавьте здесь обработку ошибок, например, установите состояние для отображения сообщения об ошибке.
+      });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* Отобразите полученные фейковые данные в вашем React-приложении */}
+      {fakeData && (
+        <div>
+          <p>Name: {fakeData.name}</p>
+          <p>Address: {fakeData.address}</p>
+          <p>Phone Number: {fakeData.phoneNumber}</p>
+        </div>
+      )}
     </div>
   );
 }
