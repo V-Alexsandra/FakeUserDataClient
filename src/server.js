@@ -81,7 +81,7 @@ const requestListener = function (req, res) {
         const fakeData = generateFakeData(region, errorCount, seed);
         res.end(JSON.stringify(fakeData));
     } else {
-        res.end('Invalid region, errorCount, seed, or region not specified');
+        res.end(JSON.stringify({ error: 'Invalid region, errorCount, seed, or region not specified' }));
     }
 };
 
