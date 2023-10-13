@@ -5,19 +5,17 @@ function App() {
   const [fakeData, setFakeData] = useState(null);
 
   useEffect(() => {
-    axios.get('https://fake-user-data-generation-ivory.vercel.app/generateFakeData?region=en&errorCount=2&seed=12345')
+    axios.get('https://fake-user-data-generation-ivory.vercel.app/generateFakeData?region=en_US&errorCount=2&seed=12345')
       .then((response) => {
         setFakeData(response.data);
       })
       .catch((error) => {
         console.error('Error fetching fake data:', error);
-        // Добавьте здесь обработку ошибок, например, установите состояние для отображения сообщения об ошибке.
       });
   }, []);
 
   return (
     <div className="App">
-      {/* Отобразите полученные фейковые данные в вашем React-приложении */}
       {fakeData && (
         <div>
           <p>Name: {fakeData.name}</p>

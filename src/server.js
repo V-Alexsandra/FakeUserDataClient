@@ -10,30 +10,27 @@ const port = process.env.PORT || 3001;
 let counter = 1;
 function introduceErrors(inputString, errorCount) {
     if (errorCount <= 0) {
-        return inputString; // Нет ошибок, возвращаем строку без изменений.
+        return inputString;
     }
 
-    // Определяем длину строки и диапазон символов
     const len = inputString.length;
     const characters = inputString.split('');
 
     for (let i = 0; i < errorCount; i++) {
-        const randomIndex = Math.floor(Math.random() * len); // Случайный индекс
+        const randomIndex = Math.floor(Math.random() * len);
 
-        // Генерируем случайное число от 0 до 2 для выбора типа ошибки
         const errorType = Math.floor(Math.random() * 3);
 
         switch (errorType) {
-            case 0: // Удаление символа
+            case 0:
                 characters.splice(randomIndex, 1);
                 break;
-            case 1: // Добавление случайного символа
-                const randomChar = generateRandomCharacter(); // Реализуйте функцию генерации случайного символа.
+            case 1:
+                const randomChar = generateRandomCharacter();
                 characters.splice(randomIndex, 0, randomChar);
                 break;
-            case 2: // Перестановка соседних символов
+            case 2:
                 if (randomIndex < len - 1) {
-                    // Проверяем, что индекс не выходит за пределы строки.
                     [characters[randomIndex], characters[randomIndex + 1]] = [characters[randomIndex + 1], characters[randomIndex]];
                 }
                 break;
@@ -45,9 +42,8 @@ function introduceErrors(inputString, errorCount) {
     return characters.join('');
 }
 
-// Функция для генерации случайного символа (пример)
 function generateRandomCharacter() {
-    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Ваш алфавит
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const randomIndex = Math.floor(Math.random() * characters.length);
     return characters[randomIndex];
 }
