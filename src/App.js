@@ -5,7 +5,7 @@ function App() {
   const [fakeData, setFakeData] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/generateFakeData?region=en&errorCount=2&seed=12345')
+    axios.get('https://fake-user-data-generation-ivory.vercel.app/generateFakeData?region=en&errorCount=2&seed=12345')
       .then((response) => {
         setFakeData(response.data);
       })

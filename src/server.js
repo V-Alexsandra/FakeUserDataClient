@@ -4,8 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 
-//const host = "0.0.0.0";
-const host = "localhost";
+const host = "0.0.0.0";
 const port = process.env.PORT || 3001;
 
 let counter = 1;
