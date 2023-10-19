@@ -1,30 +1,138 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import './App.css';
+import { Container, Row, Col, Table } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [fakeData, setFakeData] = useState(null);
+  const [region, setRegion] = useState('us');
+  const [errorCount, setErrorCount] = useState(0);
+  const randomSeed = Math.floor(Math.random() * 1000000);
+  const [seed, setSeed] = useState(randomSeed.toString());
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    axios.get('https://fake-user-data-generation-ivory.vercel.app:3001/generateFakeData?region=en_US&errorCount=2&seed=12345')
+  const fetchData = () => {
+    const baseurl = "http://localhost:3001";
+    const url = `${baseurl}/generateFakeData?region=${region}&errorCount=${errorCount}&seed=${seed}&page=${page}`;
+
+    axios.get(url)
       .then((response) => {
-        console.log(response.data);
-        setFakeData(response.data);
+        const newData = [...data, ...response.data];
+        setData(newData);
       })
       .catch((error) => {
-        console.error('Error fetching fake data:', error);
+        console.error(error);
+        setHasMore(false);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchData();
+    setPage(2);
+  }, [region, seed, errorCount]);
+
+  const handleScroll = () => {
+    setPage(page + 1);
+    fetchData();
+  };
+
+  const handleRegionChange = (e) => {
+    setRegion(e.target.value);
+    setSeed(randomSeed);
+    setData([]);
+    setPage(1);
+    setHasMore(true);
+  };
+
+  const handleErrorCountChange = (e) => {
+    setErrorCount(e.target.value);
+    setData([]);
+    setHasMore(true);
+    setPage(1);
+  };
+
+  const handleSeedChange = (e) => {
+    const newSeed = e.target.value;
+    setSeed(newSeed);
+    setData([]);
+    setHasMore(true);
+    setPage(1);
+  };
+
+  const handleRandomSeed = () => {
+    const randomSeed = Math.floor(Math.random() * 1000000).toString();
+    setSeed(randomSeed);
+    setData([]);
+    setHasMore(true);
+    setPage(1);
+  };
 
   return (
-    <div className="App">
-      {fakeData && (
-        <div>
-          <p>Name: {fakeData.name}</p>
-          <p>Address: {fakeData.address}</p>
-          <p>Phone Number: {fakeData.phoneNumber}</p>
-        </div>
-      )}
-    </div>
+    <Container>
+      <Row>
+        <Col>
+          <label>
+            Select Region:
+            <select value={region} onChange={handleRegionChange}>
+              <option value="en">USA</option>
+              <option value="pl">Poland</option>
+              <option value="de">German</option>
+            </select>
+          </label>
+        </Col>
+        <Col>
+          <label>
+            Error Count (0-10):
+            <input type="range" value={errorCount} min="0" max="10" step="0.25" onChange={handleErrorCountChange} />
+          </label>
+          <input type="number" value={errorCount} min="0" max="10" step="0.25" onChange={handleErrorCountChange} />
+        </Col>
+        <Col>
+          <label>
+            Seed:
+            <input type="text" value={seed} onChange={handleSeedChange} />
+            <button onClick={handleRandomSeed}>Random</button>
+          </label>
+        </Col>
+      </Row>
+      <br />
+      <Row>
+        <Col>
+          <InfiniteScroll
+            dataLength={data.length}
+            next={handleScroll}
+            hasMore={hasMore}
+            loader={<h4>Loading...</h4>}
+          >
+            <Table responsive bordered hover>
+              <thead>
+                <tr>
+                  <th>Number</th>
+                  <th>Random Identifier</th>
+                  <th>Full Name</th>
+                  <th>Address</th>
+                  <th>Phone Number</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr key={index}>
+                    <td>{item.number}</td>
+                    <td>{item.id}</td>
+                    <td>{item.name}</td>
+                    <td>{item.address}</td>
+                    <td>{item.phoneNumber}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </InfiniteScroll>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 
