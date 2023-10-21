@@ -14,8 +14,9 @@ function App() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
+  const baseurl = "https://fake-user-data-server.vercel.app";
+
   const fetchData = () => {
-    const baseurl = "https://fake-user-data-server.vercel.app";
     const url = `${baseurl}/generateFakeData?region=${region}&errorCount=${errorCount}&seed=${seed}&page=${page}`;
 
     axios.get(url)
@@ -70,6 +71,34 @@ function App() {
     setPage(1);
   };
 
+  const exportToCSV = () => {
+    const dataToExport = data;
+    
+    const header = [
+      { id: 'number', title: 'Number' },
+      { id: 'id', title: 'Random Identifier' },
+      { id: 'name', title: 'Full Name' },
+      { id: 'address', title: 'Address' },
+      { id: 'phoneNumber', title: 'Phone Number' },
+    ];
+
+    const csv = [header.map(item => item.title).join(',')];
+    dataToExport.forEach(item => {
+      const row = header.map(key => item[key.id]);
+      csv.push(row.join(','));
+    });
+
+    const csvBlob = new Blob([csv.join('\n')], { type: 'text/csv' });
+
+    const url = window.URL.createObjectURL(csvBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'exported-data.csv';
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <Container>
       <Row>
@@ -83,7 +112,7 @@ function App() {
             </select>
           </label>
         </Col>
-        <Col xs={12} md={5}>
+        <Col xs={12} md={4}>
           <label>
             Error Count (0-10):
             <input
@@ -106,7 +135,7 @@ function App() {
             onChange={handleErrorCountChange}
           />
         </Col>
-        <Col xs={12} md={5}>
+        <Col xs={12} md={4}>
           <label>
             Seed:
             <input
@@ -115,8 +144,11 @@ function App() {
               value={seed}
               onChange={handleSeedChange}
             />
-            <button className="btn btn-secondary" onClick={handleRandomSeed}>Random</button>
+            <button className="btn btn-primary" onClick={handleRandomSeed}>Random</button>
           </label>
+        </Col>
+        <Col xs={12} md={2}>
+          <button className="btn btn-primary" onClick={exportToCSV}>Export to CSV</button>
         </Col>
       </Row>
       <br />
