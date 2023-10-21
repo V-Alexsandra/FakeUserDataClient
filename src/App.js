@@ -15,7 +15,7 @@ function App() {
   const [hasMore, setHasMore] = useState(true);
 
   const fetchData = () => {
-    const baseurl = "http://localhost:3001";
+    const baseurl = "https://fake-user-data-server.vercel.app";
     const url = `${baseurl}/generateFakeData?region=${region}&errorCount=${errorCount}&seed=${seed}&page=${page}`;
 
     axios.get(url)
