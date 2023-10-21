@@ -73,28 +73,49 @@ function App() {
   return (
     <Container>
       <Row>
-        <Col>
+        <Col xs={12} md={2}>
           <label>
             Select Region:
-            <select value={region} onChange={handleRegionChange}>
+            <select className="form-control" value={region} onChange={handleRegionChange}>
               <option value="en">USA</option>
               <option value="pl">Poland</option>
               <option value="de">German</option>
             </select>
           </label>
         </Col>
-        <Col>
+        <Col xs={12} md={5}>
           <label>
             Error Count (0-10):
-            <input type="range" value={errorCount} min="0" max="10" step="0.25" onChange={handleErrorCountChange} />
+            <input
+              type="range"
+              className="form-range"
+              value={errorCount}
+              min="0"
+              max="10"
+              step="0.25"
+              onChange={handleErrorCountChange}
+            />
           </label>
-          <input type="number" value={errorCount} min="0" max="10" step="0.25" onChange={handleErrorCountChange} />
+          <input
+            type="number"
+            className="form-control"
+            value={errorCount}
+            min="0"
+            max="10"
+            step="0.25"
+            onChange={handleErrorCountChange}
+          />
         </Col>
-        <Col>
+        <Col xs={12} md={5}>
           <label>
             Seed:
-            <input type="text" value={seed} onChange={handleSeedChange} />
-            <button onClick={handleRandomSeed}>Random</button>
+            <input
+              type="text"
+              className="form-control"
+              value={seed}
+              onChange={handleSeedChange}
+            />
+            <button className="btn btn-secondary" onClick={handleRandomSeed}>Random</button>
           </label>
         </Col>
       </Row>
