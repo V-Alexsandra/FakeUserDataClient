@@ -73,7 +73,7 @@ function App() {
 
   const exportToCSV = () => {
     const dataToExport = data;
-    
+
     const header = [
       { id: 'number', title: 'Number' },
       { id: 'id', title: 'Random Identifier' },
@@ -135,7 +135,7 @@ function App() {
             onChange={handleErrorCountChange}
           />
         </Col>
-        <Col xs={12} md={4}>
+        <Col xs={12} md={3}>
           <label>
             Seed:
             <input
@@ -147,7 +147,7 @@ function App() {
             <button className="btn btn-primary" onClick={handleRandomSeed}>Random</button>
           </label>
         </Col>
-        <Col xs={12} md={2}>
+        <Col xs={12} md={3} className="d-flex align-items-center justify-content-center">
           <button className="btn btn-primary" onClick={exportToCSV}>Export to CSV</button>
         </Col>
       </Row>
